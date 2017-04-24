@@ -69,7 +69,7 @@ Notice that in the examples above, we use our examples for their *side effects* 
 
 `map` expects a callback which will be called for every element in the array. The callback will be passed three arguments: the element, the index of the element, and the entire collection. `map` creates a new array, and pushes the result of the return value from calling `callback` on each element to this new array. `map` then returns this new array.
 
-**Use `map` when you need a new array the same size as the original, but with some operation performed on each of the elements.**
+**Use `map` when you need a new array the same size as the original, but with each of the elements modified by the same operation.**
 
 ### Example implemention of `map`
 
@@ -104,4 +104,46 @@ function triple(num) {
 let nums = [2, 3, 4];
 
 let tripledNums = nums.map(triple);
+```
+
+## `Array.filter`
+
+`filter` expects a callback that returns true or false. `filter` returns a new array containing the elements from the original array that return `true` when passed into the callback.
+
+**Use `filter` when you need to take an array and return a (potentially) smaller version of it, without modifying any of the elements.**
+
+### Example implemention of `filter`
+
+```javascript
+Array.prototype.filter = function(callback) {
+  let result = [];
+
+  this.forEach((element, i, collection) => {
+    if (callback(element, i, collection) === true) {
+      result.push(element);
+    }
+  });
+
+  return result;
+}
+```
+
+### Example uses for `filter`
+
+```javascript
+let nums = [1, 2, 3, 4, 5, 6, 7];
+
+let oddNums = nums.filter(num => num % 2);
+```
+
+Because `filter` and `map` both return arrays, they are easily chained:
+
+```javascript
+const double = (num) => num * 2
+const greaterThanSix = (num) => num > 6
+
+let nums = [1, 2, 3, 4, 5, 6, 7, 8]
+
+let doubledNumsGreaterThanSix = nums.map(double).filter(greaterThanSix)
+let numsGreaterThanSixDoubled = nums.filter(greaterThanSix).map(double)
 ```

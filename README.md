@@ -9,10 +9,10 @@ This article focuses on improving your fluency in using 4 of the main higher ord
 
 ## Summary of Array Method Uses
 
-- **`forEach`** Use to perform operations on every element without creating a new array.
-- **`map`** Use to return a new array of the same length where each element has been processed in the same way.
-- **`filter`** Use to return a (potentially) smaller array based on a truth test, without modifying elements.
-- **`reduce`** Use to return a single value based on a reduction of each of the elements in the array.
+- **`forEach`**: Use to perform operations on every element *without creating a new array*.
+- **`map`**: Use to return a *new array of the same length* where each element has been processed in the same way.
+- **`filter`**: Use to return a (potentially) *smaller array based on a truth test*, without modifying elements.
+- **`reduce`**: Use to return *a single value based on a reduction* of each of the elements in the array.
 
 ## `Array.prototype.forEach`
 
@@ -73,7 +73,7 @@ Notice that in the examples above, we use our examples for their *side effects* 
 
 ## `Array.prototype.map`
 
-`map` expects a callback which will be called for every element in the array. The callback will be passed three arguments: the element, the index of the element, and the entire collection. `map` creates a new array, and pushes the result of the return value from calling `callback` on each element to this new array. `map` then returns this new array.
+`map` expects a callback which will be called for every element in the array. The callback will be passed three arguments: the element, the index of the element, and the entire collection. `map` creates a new array, and pushes into this array the result of  calling `callback` on each element. `map` then returns this new array.
 
 **Use `map` when you need a new array the same size as the original, but with each of the elements modified by the same operation.**
 
@@ -110,6 +110,24 @@ function triple(num) {
 let nums = [2, 3, 4];
 
 let tripledNums = nums.map(triple);
+```
+
+Be careful not to pass functions as the callback into map that expect a second argument, as `map` will pass the index of each element as this second argument. Consider the following example using `parseInt` which optionally takes a second argument indicating the `radix` of the first argument.
+
+```javascript
+let numStrings = ['1', '2', '3'];
+let nums = numStrings.map(parseInt); // calls   parseInt('1', 0)
+                                     //         parseInt('2', 1)
+                                     //         parseInt('3', 2)
+
+                                        returns [1, NaN, NaN]
+```
+
+In order to protect prevent this unintended behavior, wrap the call to `parseInt` in an anonymous function that expects only a single argument, and then, pass that single argument into `parseInt`:
+
+```javascript
+let numStrings = ['1', '2', '3'];
+let nums = numStrings.map((num) => parseInt(num)); // calls parseInt('1')
 ```
 
 ## `Array.prototype.filter`
@@ -208,10 +226,10 @@ let largest = nums.reduce((total, num) => num > total ? num : total)
 
 ## Summary of Array Method Uses
 
-- **`forEach`** Use to perform operations on every element without creating a new array.
-- **`map`** Use to return a new array of the same length where each element has been processed in the same way.
-- **`filter`** Use to return a (potentially) smaller array based on a truth test, without modifying elements.
-- **`reduce`** Use to return a single value based on a reduction of each of the elements in the array.
+- **`forEach`**: Use to perform operations on every element *without creating a new array*.
+- **`map`**: Use to return a *new array of the same length* where each element has been processed in the same way.
+- **`filter`**: Use to return a (potentially) *smaller array based on a truth test*, without modifying elements.
+- **`reduce`**: Use to return *a single value based on a reduction* of each of the elements in the array.
 
 ## Example
 
@@ -221,23 +239,27 @@ Log the sum of all the numbers, and number like strings in the following array t
 let values = ['letters', 3, '5', 4, ['a', 'b'], '2', false, 8, () => {}];
 ```
 
-Being familiar with the uses of the higher order array methods, we can approach this problem as follows:
+Being familiar with the uses of the higher order array methods, this problem can be approached as follows:
 
-1) I'd like to try and convert every element in this array to be a number (**map**)
-2) I can then filter for values that are not `NaN` (**filter**)
-3) I can then reduce the remaining numbers down to a sum (**reduce**)
+1) Use `parseInt` to *convert every element* in this array to be either a number or `NaN` (**map**)
+2) *Filter for values* that are not `NaN` (**filter**)
+3) *Reduce the remaining numbers* down to a sum (**reduce**)
 
-I'd like to start with a series of helper functions for each of these steps:
+Start by simply writing the helper functions for each of these steps:
 
-Step **1**: The native `parseInt` function will do this for me.
+**Step 1**: The native `parseInt` function will be used. Care must be taken, however, because `parseInt` accepts an optional second argument for `radix`, and `map` will be passing the element's index as a second argument. Because of this, wrap the call to `parseInt` in an outer function:
 
-Step **2**:
+```javascript
+(val) => parseInt(val)
+```
+
+**Step 2**:
 
 ```javascript
 const isNotNaN = (num) => !isNaN(num)
 ```
 
-Step **3**:
+**Step 3**:
 
 ```javascript
 const sum = (a, b) => a + b

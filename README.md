@@ -119,8 +119,7 @@ let numStrings = ['1', '2', '3'];
 let nums = numStrings.map(parseInt); // calls   parseInt('1', 0)
                                      //         parseInt('2', 1)
                                      //         parseInt('3', 2)
-
-                                        returns [1, NaN, NaN]
+                                     // returns [1, NaN, NaN]
 ```
 
 In order to protect prevent this unintended behavior, wrap the call to `parseInt` in an anonymous function that expects only a single argument, and then, pass that single argument into `parseInt`:

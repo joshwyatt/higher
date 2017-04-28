@@ -173,7 +173,7 @@ let numsGreaterThanSixDoubled = nums.filter(greaterThanSix).map(double)
 
 ## `Array.prototype.reduce`
 
-`reduce` creates a single value out of an array. In order to do this, it uses accepts a callback function called an *accumulator*. The accumulator takes two values, and returns a single value. Before demonstrating `reduce`, here are a few example accumulators, notice that they each take two values and return a single value:
+`reduce` creates a single value out of an array. In order to do this, it uses accepts a callback function called a *reducer*. The reducer takes two values, and returns a single value. Before demonstrating `reduce`, here are a few example reducers, notice that they each take two values and return a single value:
 
 ```javascript
 const smaller = (a, b) => a < b ? a : b
@@ -188,21 +188,21 @@ const concatenated = (a, b) => a + b // for strings
 const concatenated = (a, b) => [...a, ...b] // for arrays
 ```
 
-`reduce` calls the passed in accumulator on every element in the array. The first argument of the accumulator is the result of the last call to the accumulator. If it is the first call to the accumulator, the first element of the array is passed in, or, if supplied, a default starting value. The second argument to the accumulator is the current element in the array.
+`reduce` calls the passed in reducer on every element in the array. The first argument of the reducer is the result of the last call to the reducer. If it is the first call to the reducer, the first element of the array is passed in, or, if supplied, a default starting value. The second argument to the reducer is the current element in the array.
 
 **Use `reduce` when you need to reduce an array down to a single value.**
 
 ### Example implemention of `reduce`
 
 ```javascript
-Array.prototype.reduce = function(accumulator, startingValue) {
+Array.prototype.reduce = function(reducer, startingValue) {
   if (startingValue === undefined) {
     startingValue = this.shift();
   }
   let reduction = startingValue;
 
   this.forEach((element) => {
-    reduction = accumulator(reduction, element)
+    reduction = reducer(reduction, element)
   });
 
   return reduction;
